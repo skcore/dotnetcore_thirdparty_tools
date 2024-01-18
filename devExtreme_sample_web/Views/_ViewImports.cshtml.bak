@@ -1,0 +1,3 @@
+﻿@using devExtreme_Sample_Grid
+@using devExtreme_Sample_Grid.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

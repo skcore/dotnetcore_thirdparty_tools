@@ -1,0 +1,20 @@
+﻿@{
+    var Dropdownlist = new Syncfusion.EJ2.DropDowns.DropDownList() { DataSource = ViewData["states"], Query = "new ej.data.Query()", AllowFiltering = true, Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "ID", Text = "Name" } };
+}
+
+<ejs-grid id="Grid" dataSource="@ViewData["customers"]" toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Update", "Cancel","Search" })"
+          allowPaging="true" allowSorting="true">
+    <e-data-manager crudUrl="/Home/CrudUpdate" adaptor="UrlAdaptor" url="/Home/UrlDatasource"></e-data-manager>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" newRowPosition="Top"></e-grid-editSettings>
+    <e-grid-filtersettings type="Menu"></e-grid-filtersettings>
+    <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
+    <e-grid-columns>
+        <e-grid-column field="EmpName" headerText="EmpName" textAlign="Right" width="120"></e-grid-column>
+        <e-grid-column field="EmpSalary" headerText="EmpSalary" validationRules="@(new { required=true})" width="150"></e-grid-column>
+        <e-grid-column field="StateName" headerText="State" width="120" editType="dropdownedit" edit="new {@params = Dropdownlist}"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+<script src="https://cdn.syncfusion.com/ej2/24.1.41/dist/ej2.min.js"></script>
+<link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/23.1.36/fluent.css" />
+<ejs-scripts></ejs-scripts>

@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@(Html.DevExtreme().DataGrid<Customer>()
+    .ID("gridContainer")
+   .ShowBorders(true)
+    .FilterRow(filterRow => filterRow
+        .Visible(true)
+        .ApplyFilter(GridApplyFilterMode.Auto)
+    )
+    .SearchPanel(searchPanel => searchPanel
+        .Visible(true)
+        .Width(240)
+        .Placeholder("Search...")
+    )
+    .HeaderFilter(headerFilter => headerFilter.Visible(true))
+    .Paging(paging => paging.Enabled(true))
+    .Editing(editing =>
+    {
+        editing.Mode(GridEditMode.Row);
+        editing.AllowAdding(true);
+        editing.AllowDeleting(true);
+        editing.AllowUpdating(true);
+    })
+    .Columns(columns =>
+    {
+        columns.AddFor(m => m.ID);
+        columns.AddFor(m => m.EmpName);
+        columns.AddFor(m => m.EmpSalary);
+        columns.AddFor(m => m.StateID)
+            .Width(125)
+            .Lookup(lookup => lookup
+                .DataSource(d => d.Mvc().Controller("Home").LoadAction("GetStates").Key("ID"))
+                .DisplayExpr("Name")
+                .ValueExpr("ID")
+            );
+    })
+    .DataSource(d => d.Mvc()
+        .Controller("Home")
+        .LoadAction("Get")
+        .UpdateAction("Put")
+        .InsertAction("Post")
+        .DeleteAction("Delete")
+        .Key("ID")
+    )
+)

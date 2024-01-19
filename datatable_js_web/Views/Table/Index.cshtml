@@ -1,0 +1,229 @@
+﻿@model IEnumerable<datatable_js_web.Models.Customer>;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Without dataTable JS</h1>
+</div>
+
+<table id="myGrid" class="display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Salary</th>
+            <th>Age</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td class="editable">@item.EmpName</td>
+                <td class="editable" data-field="EmpSalary">@item.EmpSalary</td>
+
+                <td class="editable" data-field="Age">
+                    <select class="editAgeDropdown" style="display:none;">
+                        <option value="18">18</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
+                    </select>
+                    <span class="displayAge">25</span>
+                </td>
+
+                <td>
+                    <a href="#" class="edit" data-id="@item.ID">Edit</a>
+                    <a href="#" class="save" data-id="@item.ID" style="display:none;">Update</a>
+                    <a href="#" class="cancel" data-id="@item.ID" style="display:none;">Cancel</a>
+                    <a href="#" class="delete" data-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="pagination-container">
+    <ul class="pagination">
+        <li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</div>
+
+
+@section Scripts
+{
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            var currentPage = 1;
+            var pageSize = 5; // Set your desired page size
+            var totalItems = @Model.Count(); // Replace with the actual total count of items
+
+            function refreshTable() {
+                // Fetch data for the current page from the server
+                // You need to update your server-side logic to handle pagination
+
+                // For example, make an AJAX call to your server to get paginated data
+                // and update the tbody with the new data
+                $.ajax({
+                    url: "/Table/GetData",
+                    method: "GET",
+                    data: { page: currentPage, pageSize: pageSize },
+                    success: function (data) {
+                        // Update the tbody with the new data
+                        updateTableBody(data);
+
+                        // Enable/disable Previous and Next buttons based on the current page
+                        $("#prevPage").prop("disabled", currentPage === 1);
+                        $("#nextPage").prop("disabled", currentPage * pageSize >= totalItems);
+                    },
+                    error: function (error) {
+                        console.error("Error fetching data: ", error);
+                    }
+                });
+            }
+
+            function updateTableBody(data) {
+                // Clear existing rows
+                $("#myGrid tbody").empty();
+
+                // Append new rows
+                data.forEach(function (item) {
+                    $("#myGrid tbody").append(
+                        "<tr>" +
+                        "<td>" + item.ID + "</td>" +
+                        "<td class='editable' data-field='Name'>" + item.EmpName + "</td>" +
+                        "<td class='editable' data-field='Name'>" + item.EmpSalary + "</td>" +
+                        "<td class='editable' data-field='Age'>" + item.Age + "</td>" +
+                        "<td>" +
+                        "<a href='#' class='edit' data-id='" + item.ID + "'>Edit</a>" +
+                        "<a href='#' class='delete' data-id='" + item.IIDd + "'>Delete</a>" +
+                        "</td>" +
+                        "</tr>"
+                    );
+                });
+            }
+
+            // Initialize table with the initial data
+            refreshTable();
+
+            // Add event listener for pagination
+            $("#prevPage").click(function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    refreshTable();
+                }
+            });
+
+            $("#nextPage").click(function () {
+                // Implement logic to determine if there are more pages
+                // For example, check if (currentPage * pageSize) < totalItems
+                if ((currentPage * pageSize) < totalItems) {
+                    currentPage++;
+                    refreshTable();
+                }
+            });
+
+
+
+            $(".edit").click(function () {
+                var row = $(this).closest("tr");
+                var id = row.find("td:first-child").text();
+
+                // Loop through each editable column
+                row.find(".editable").each(function () {
+                    var field = $(this).data("field");
+
+                    // Handle specific logic for the "Age" column
+                    if (field === "Age") {
+                        var displayAge = $(this).find(".displayAge").text();
+                        var ageDropdown = $(this).find(".editAgeDropdown");
+
+                        // Set the selected option in the dropdown
+                        ageDropdown.val(displayAge);
+
+                        // Show the dropdown and hide the display
+                        ageDropdown.show();
+
+                        $(this).find(".displayAge").hide();
+                    }
+                    else {
+                        var field = $(this).data("field");
+                        var value = $(this).text();
+
+                        // Replace the content with input field for editing
+                        $(this).html('<input type="text" id="edit' + field + '" value="' + value + '">');
+                        // Handle other editable columns as needed
+                    }
+                });
+
+                row.find(".edit, .delete").hide();
+                row.find(".save, .cancel").show();
+            });
+
+            $(".save").click(function () {
+                var row = $(this).closest("tr");
+                var id = row.find("td:first-child").text();
+
+                // Loop through each editable column
+                row.find(".editable").each(function () {
+                    var field = $(this).data("field");
+
+                    // Handle specific logic for the "Age" column
+                    if (field === "Age") {
+                        var ageDropdown = $(this).find(".editAgeDropdown");
+
+                        // Get the selected value from the dropdown
+                        var newValue = ageDropdown.val();
+                    }
+                    else {
+                        // Handle other editable columns as needed
+                    }
+
+                    // Perform AJAX request to update data on the server
+
+                    // After successful update, update the view
+                    // Implement logic to update the specific column
+                });
+
+                row.find(".edit, .delete").show();
+                row.find(".save, .cancel").hide();
+            });
+
+            $(".cancel").click(function () {
+                var row = $(this).closest("tr");
+                var id = row.find("td:first-child").text();
+
+                // Loop through each editable column
+                row.find(".editable").each(function () {
+                    var field = $(this).data("field");
+
+                    // Handle specific logic for the "Age" column
+                    if (field === "Age") {
+                        var ageDropdown = $(this).find(".editAgeDropdown");
+
+                        // Hide the dropdown and show the display
+                        ageDropdown.hide();
+                        $(this).find(".displayAge").show();
+                    }
+                    else {
+                        // Handle other editable columns as needed
+                    }
+                });
+
+                row.find(".edit, .delete").show();
+                row.find(".save, .cancel").hide();
+            });
+        });
+
+
+
+    </script>
+}

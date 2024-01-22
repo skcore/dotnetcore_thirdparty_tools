@@ -1,0 +1,123 @@
+﻿@model List<Customer>;
+
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Salary</th>
+            <th>Department</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr data-id="@customer.ID">
+                <td ata-field="ID">@customer.ID</td>
+                <td class="editable" data-field="Name">@customer.EmpName</td>
+                <td class="editable" data-field="Position">@customer.EmpSalary</td>
+                <td class="editable" data-field="Department"> @customer.Department</td>
+                <td>
+                    <button class="save-btn" style="display: none;">Save</button>
+                    <button class="cancel-btn" style="display: none;">Cancel</button>
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts
+{
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.4/css/select.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var table = $('#example').DataTable();
+
+            $('#example').on('click', 'tbody td.editable', function () {
+                var cell = table.cell(this);
+                cell.edit({
+                    title: 'Edit:',
+                    buttons: 'Save'
+                });
+            });
+
+            $('#example').on('click', '.save-btn', function () {
+
+                debugger; 
+
+                var tr = $(this).closest('tr');
+                var data = table.row(tr).data();
+
+                // Perform AJAX request to update data on the server
+                $.ajax({
+                    url: '/datatable/Edit',
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response.success) {
+                            table.row(tr).invalidate().draw(false);
+                        } else {
+                            console.error('Failed to update data.');
+                        }
+                    },
+                    error: function () {
+                        console.error('Error during AJAX request.');
+                    }
+                });
+            });
+
+            $('#example').on('click', '.cancel-btn', function () {
+                debugger;
+               // table.cell(this).cancelEdit();
+
+                tr.find('.save-btn, .cancel-btn').show();
+                tr.find('.edit-btn, .delete-btn').hide();
+            });
+
+            $('#example').on('click', '.edit-btn', function () {
+
+                var tr = $(this).closest('tr');
+                //table.row(tr).edit();
+
+                // Show/hide buttons for the specific row
+                tr.find('.save-btn, .cancel-btn').show();
+                tr.find('.edit-btn, .delete-btn').hide();
+            });
+
+            $('#example').on('click', '.delete-btn', function () {
+                var tr = $(this).closest('tr');
+                var data = table.row(tr).data();
+
+                // Perform AJAX request to delete data on the server
+                $.ajax({
+                    url: '/datatable/Delete',
+                    type: 'POST',
+                    data: { id: data.Id },
+                    success: function (response) {
+                        if (response.success) {
+                            table.row(tr).remove().draw(false);
+                        } else {
+                            console.error('Failed to delete data.');
+                        }
+                    },
+                    error: function () {
+                        console.error('Error during AJAX request.');
+                    }
+                });
+            });
+        });
+    </script>
+
+}

@@ -5,18 +5,43 @@
         public int ID { get; set; }
         public string? EmpName { get; set; }
         public int EmpSalary { get; set; }
-        public int StateID { get; set; }
+        //public int StateID { get; set; }
+        public string? Department { get; set; }
 
-        
+        public string? City { get; set; }
+
+
 
         public List<Customer> GetCustomers()
         {
             List<Customer> customers = new List<Customer>();
 
-            for (int i = 1; i <= 100; i++)
-            {
-                customers.Add(new Customer { ID = i, EmpName = $"Jhon {i}", EmpSalary = 1000 + i, StateID = i+1 }); 
-            }
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    customers.Add(new Customer { ID = i, EmpName = $"Jhon {i}", EmpSalary = 1000 + i, StateID = i+1, Department="HR" }); 
+            //}
+
+            customers.Add(new Customer { ID = 1, EmpName = $"Jhon", EmpSalary = 1000 ,Department = "HR", City= "Alabama" });
+            customers.Add(new Customer { ID = 2, EmpName = $"Mix", EmpSalary = 2000, Department = "Marketing", City = "California" });
+            customers.Add(new Customer { ID = 3, EmpName = $"Source", EmpSalary = 3000, Department = "IT", City = "Alabama" });
+            customers.Add(new Customer { ID =4, EmpName = $"Camel", EmpSalary = 4000, Department = "Finance", City = "California" });
+            customers.Add(new Customer { ID = 5, EmpName = $"Gane", EmpSalary = 5000, Department = "IT", City = "Alabama" });
+            customers.Add(new Customer { ID = 6, EmpName = $"Gemini", EmpSalary = 6000, Department = "HR", City = "California" });
+            customers.Add(new Customer { ID = 7, EmpName = $"Emppp", EmpSalary = 7000, Department = "Marketing" , City = "Alabama" });
+            customers.Add(new Customer { ID = 8, EmpName = $"Sini", EmpSalary = 8000, Department = "Finance", City = "Colorado" });
+            customers.Add(new Customer { ID = 9, EmpName = $"Boini", EmpSalary = 9000, Department = "IT", City = "Alabama" });
+            customers.Add(new Customer { ID = 10, EmpName = $"Loin", EmpSalary = 10000, Department = "Marketing", City = "Alabama" });
+            customers.Add(new Customer { ID = 1, EmpName = $"Jhon", EmpSalary = 1000, Department = "HR", City = "California" });
+            customers.Add(new Customer { ID = 2, EmpName = $"Mix", EmpSalary = 2000, Department = "Marketing", City = "Alabama" });
+            customers.Add(new Customer { ID = 3, EmpName = $"Source", EmpSalary = 3000, Department = "IT", City = "California" });
+            customers.Add(new Customer { ID = 4, EmpName = $"Camel", EmpSalary = 4000, Department = "Finance", City = "Alabama" });
+            customers.Add(new Customer { ID = 5, EmpName = $"Gane", EmpSalary = 5000, Department = "IT", City = "Alabama" });
+            customers.Add(new Customer { ID = 6, EmpName = $"Gemini", EmpSalary = 6000, Department = "HR", City = "Colorado" });
+            customers.Add(new Customer { ID = 7, EmpName = $"Emppp", EmpSalary = 7000, Department = "Marketing", City = "California" });
+            customers.Add(new Customer { ID = 8, EmpName = $"Sini", EmpSalary = 8000, Department = "Finance", City = "Alabama" });
+            customers.Add(new Customer { ID = 9, EmpName = $"Boini", EmpSalary = 9000, Department = "IT", City = "Colorado" });
+            customers.Add(new Customer { ID = 10, EmpName = $"Loin", EmpSalary = 10000, Department = "Marketing", City = "California" });
+
 
             return customers;
         }

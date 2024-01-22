@@ -4,6 +4,9 @@ using System.Diagnostics;
 
 namespace datatable_js_web.Controllers
 {
+    /// <summary>
+    /// Working as expected 
+    /// </summary>
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

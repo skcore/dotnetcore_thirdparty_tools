@@ -67,8 +67,8 @@
                     },
                     { data: 'name', class: 'editable text' },
                     { data: 'age', class: 'editable text', },
-                    { data: 'city',  class: 'editable text' },
-                    { data: 'state',  class: 'editable text' },
+                    { data: 'city', class: 'editable text' },
+                    { data: 'state', class: 'editable select' },
                     {
                         render: function (data, type, row) {
                             return createButton('edit', row.id);
@@ -107,7 +107,10 @@
             $(clickedRow).find('td').each(function () {
                 if ($(this).hasClass('editable')) {
                     if ($(this).hasClass('text')) {
-                       var html= fnCreateTextBox($(this).html(), 'name');
+                        var html = fnCreateTextBox($(this).html(), 'name');
+                        $(this).html($(html))
+                    } else {
+                        var html = fnCreateSelect($(this).html(), 'name');
                         $(this).html($(html))
                     }
                 }
@@ -124,6 +127,16 @@
             return '<input data-field="' + fieldprop + '" type="text" value="' + value + '" ></input>';
         }
 
+        function fnCreateSelect(value, fieldprop) {
+            var select = '<select>' +
+                '<option value="' + value + '">' + value + '</option>' +
+                '<option value="Option1">Option 1</option>' +
+                '<option value="Option2">Option 2</option>' +
+                '<option value="Option3">Option 3</option>' +
+                '</select>';
+            return select;
+        }
+
         $('#dtExample').on('click', 'tbody td .cancel', function (e) {
             fnResetControls();
             $('#dtExample tbody tr td .update').removeClass('update').addClass('edit').html('Edit');
@@ -131,7 +144,7 @@
         });
 
         function fnResetControls() {
-            var openedTextBox = $('#dtExample').find('input');
+            var openedTextBox = $('#dtExample').find('select,input');
             $.each(openedTextBox, function (k, $cell) {
                 $(openedTextBox[k]).closest('td').html($cell.value);
             })

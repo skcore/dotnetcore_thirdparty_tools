@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace datatable_js_web.Controllers
 {
+    /// <summary>
+    /// Not completed ... few changes are required 
+    /// </summary>
     public class TableController : Controller
     {
         public IActionResult Index()

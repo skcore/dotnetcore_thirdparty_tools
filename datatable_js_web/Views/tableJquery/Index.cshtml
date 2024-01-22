@@ -1,0 +1,134 @@
+﻿@model List<Customer>;
+
+<table id="myDataTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Salary</th>
+            <th>Department</th>
+            <th>City</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.ID</td>
+                <td>@customer.EmpName</td>
+                <td>@customer.EmpSalary</td>
+                <td> @customer.Department</td>
+                <td> @customer.City</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button id="btnAddNewCompany" value="Ok">Add new Employee...</button>
+<button id="btnDeleteCompany" value="cancel">Delete selected Employee</button>
+
+<form id="formAddNewCompany" action="#" title="Add new company">
+    <label for="name">Employee Name</label><input type="text" name="name" id="name" class="required" rel="0" />
+    <br />
+    <label for="name">Employee Salary</label><input type="text" name="address" id="address" rel="1" />
+    <br />
+    <label for="name">Department</label><input type="text" name="postcode" id="postcode" />
+    <br />
+    <label for="name">City</label><select name="town" id="town" rel="2">
+        <option value="London">London</option>
+        <option value="Kent">Kent</option>
+        <option value="Portsmouth">Portsmouth</option>
+    </select>
+</form>
+
+
+<div id="processing_message" style="display:none" title="Processing">Please wait while your request is being processed...</div>
+
+
+@section Scripts
+{
+    <link href="~/css/demo_table.css" rel="stylesheet" />
+    <link href="~/css/demo_table_jui.css" rel="stylesheet" />
+    <link href="~/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/themes/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+    <script src="~/js/jquery-1.4.4.min.js"></script>
+    <script src="~/js/jquery.datatables.min.js"></script>
+    <script src="~/js/jquery.jeditable.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/jquery.validate.js"></script>
+    <script src="~/js/jquery.datatables.editable.js"></script>
+
+    <script type="text/javascript">
+
+         $(document).ready(function () {
+                $('#myDataTable').dataTable({
+                    "bJQueryUI": true,
+                    "sPaginationType": "full_numbers"
+                }).makeEditable({
+                idSrc: 'ID',
+                "aoColumns": [
+                    null,//null for read-only columns
+                    {
+                        indicator: 'Saving...',
+                        tooltip: 'Click to change Name',
+                        loadtext: 'loading...',
+                        type: 'text',
+                        onblur: 'submit',
+                    },
+                    {
+                        indicator: 'Saving...',
+                        tooltip: 'Click to change Salary',
+                        loadtext: 'loading...',
+                        type: 'text',
+                        onblur: 'submit',
+                    },
+                    {
+                        indicator: 'Saving...',
+                        tooltip: 'Click to change Department',
+                        loadtext: 'loading...',
+                        type: 'text',
+                        onblur: 'submit',
+                    },
+                    {
+                        indicator: 'Saving...',
+                        tooltip: 'Click to select city',
+                        loadtext: 'loading...',
+                        type: 'select',
+                        onblur: 'submit',
+                        data: "{'1':'London','2':'Liverpool','3':'Portsmouth','4':'Edinburgh', '5':'Blackburn','6':'Kent','7':'Surrey'}"
+                    }
+                ],
+                sUpdateURL: "/tableJquery/UpdateData",
+                sAddURL: "/tableJquery/AddData",
+                sDeleteURL: "/tableJquery/DeleteData",
+
+                    sAddNewRowFormId: "formAddNewCompany",
+                    sAddNewRowButtonId: "btnAddNewCompany",
+                    sAddNewRowOkButtonId: "btnAddNewCompanyOk",
+                    sAddNewRowCancelButtonId: "btnAddNewCompanyCancel",
+                    sDeleteRowButtonId: "btnDeleteCompany",
+
+                    fnShowError: function (message, action) {
+                        switch (action) {
+                            case "update":
+                                alert(message, "Update failed");
+                                break;
+                            case "delete":
+                            alert(message, "Delete failed");
+                                break;
+                            case "add":
+                                $("#lblAddError").html(message);
+                                $("#lblAddError").show();
+                                break;
+                        }
+                    },
+                    fnStartProcessingMode: function () {
+                        $("#processing_message").dialog();
+                    },
+                    fnEndProcessingMode: function () {
+                        $("#processing_message").dialog("close");
+                    }
+                });
+            });
+    </script>
+}

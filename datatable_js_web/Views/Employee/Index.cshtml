@@ -1,0 +1,99 @@
+﻿@model List<Employee>
+
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.Id</td>
+                <td>@employee.Name</td>
+                <td>@employee.Position</td>
+                <td data-editor="select">
+                    @employee.Department
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Include DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css" />
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css">
+    <script src="~/js/datatables.editor.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var editor = new $.fn.dataTable.Editor({
+                ajax: {
+                    url: '/Employee/Process', // Replace with your server-side processing endpoint
+                    type: 'POST'
+                },
+                table: '#example',
+                fields: [
+                    { label: 'Name', name: 'Name' },
+                    { label: 'Position', name: 'Position' },
+                    {
+                        label: 'Department:',
+                        name: 'Department',
+                        type: 'select',
+                        options: [
+                            'IT',
+                            'Marketing',
+                            'Finance'
+                            // Add more options as needed
+                        ]
+                    }
+                ]
+            });
+
+            var table = $('#example').DataTable({
+                dom: 'Bfrtip',
+                ajax: '/Employee/GetData', // Replace with your server-side data endpoint
+                columns: [
+                    { data: 'Id' },
+                    { data: 'Name' },
+                    { data: 'Position' },
+                    {
+                        data: 'Department',
+                        className: 'editable', // Add a class to make the column editable
+                        editor: editor
+                    }
+                ],
+                select: true,
+                buttons: [
+                    { extend: 'create', editor: editor },
+                    { extend: 'edit', editor: editor },
+                    { extend: 'remove', editor: editor }
+                ]
+            });
+
+            // Event listener for opening the Editor on a new row
+            editor.on('open', function (e, type) {
+                if (type === 'inline') {
+                    // Set the default selected value for the Department dropdown
+                    editor.field('Department').val('IT');
+                }
+            });
+
+            // Inline editing in the table itself
+            $('#example').on('click', 'tbody td.editable', function (e) {
+                editor.inline(this);
+            });
+        });
+    </script>
+
+}

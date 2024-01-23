@@ -14,18 +14,34 @@ namespace datatable_js_web.Controllers
 
             if (!string.IsNullOrEmpty(nameFilter))
             {
-                filteredUsers = filteredUsers.Where(u => (u.EmpName.Contains(nameFilter, StringComparison.OrdinalIgnoreCase) || u.Department.Contains(nameFilter, StringComparison.OrdinalIgnoreCase))).ToList();
+                filteredUsers = filteredUsers.Where(u => (u.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase) || u.Department.Contains(nameFilter, StringComparison.OrdinalIgnoreCase))).ToList();
             }
 
-            switch (sortOrder)
+            // Set the default sorting order if it's not provided
+            if (string.IsNullOrEmpty(sortOrder))
             {
-                case "ID":
+                sortOrder = "id";
+            }
+
+            ViewBag.SortDirection = "asc"; // Default sorting direction
+
+            // Toggle the sorting direction if the same column is clicked again
+            if (ViewBag.SortOrder != null)
+            {
+                if (sortOrder.Equals(ViewBag.SortOrder, StringComparison.OrdinalIgnoreCase))
+                {
+                    ViewBag.SortDirection = (ViewBag.SortDirection == "asc") ? "desc" : "asc";
+                }
+            }
+            switch (sortOrder.ToLower())
+            {
+                case "id":
                     filteredUsers = filteredUsers.OrderBy(u => u.ID).ToList();
                     break;
-                case "Name":
-                    filteredUsers = filteredUsers.OrderBy(u => u.EmpName).ToList();
+                case "name":
+                    filteredUsers = filteredUsers.OrderBy(u => u.Name).ToList();
                     break;
-                case "Department":
+                case "department":
                     filteredUsers = filteredUsers.OrderBy(u => u.Department).ToList();
                     break;
                 // Add more cases for additional columns if needed
@@ -37,18 +53,18 @@ namespace datatable_js_web.Controllers
             int pageSize = 5;
             int totalPages = (int)Math.Ceiling((double)filteredUsers.Count() / pageSize);
 
-            filteredUsers = filteredUsers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var usersToDisplay = filteredUsers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             ViewBag.Page = page;
             ViewBag.TotalPages = totalPages;
             ViewBag.SortOrder = sortOrder;
             ViewBag.NameFilter = nameFilter;
 
-            return View(filteredUsers);
+            return View(usersToDisplay);
         }
         // Action for handling inline edit
         [HttpPost]
-        public IActionResult Edit(int Id,string Name,string Department,string City)
+        public IActionResult Edit(int Id, string Name, string Department, string City)
         {
             // Perform update logic here
             // ...

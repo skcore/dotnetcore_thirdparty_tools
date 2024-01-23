@@ -31,8 +31,8 @@
     .Columns(columns =>
     {
         columns.AddFor(m => m.ID);
-        columns.AddFor(m => m.EmpName);
-        columns.AddFor(m => m.EmpSalary);
+        columns.AddFor(m => m.Name);
+        columns.AddFor(m => m.Salary);
         columns.AddFor(m => m.StateID)
             .Width(125)
             .Lookup(lookup => lookup

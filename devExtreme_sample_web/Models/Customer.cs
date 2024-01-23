@@ -3,8 +3,8 @@
     public class Customer
     {
         public int ID { get; set; }
-        public string? EmpName { get; set; }
-        public int EmpSalary { get; set; }
+        public string? Name { get; set; }
+        public int Salary { get; set; }
         public int StateID { get; set; }
 
         
@@ -15,7 +15,7 @@
 
             for (int i = 1; i <= 100; i++)
             {
-                customers.Add(new Customer { ID = i, EmpName = $"Jhon {i}", EmpSalary = 1000 + i, StateID = i+1 }); 
+                customers.Add(new Customer { ID = i, Name = $"Jhon {i}", Salary = 1000 + i, StateID = i+1 }); 
             }
 
             return customers;

@@ -24,19 +24,19 @@ namespace datatable_js_web.Controllers
             return Json(new { data = employees });
         }
 
-        public IActionResult Process([FromBody] EditorData editorData)
-        {
-            try
-            {
+        //public IActionResult Process([FromBody] EditorData editorData)
+        //{
+        //    try
+        //    {
               
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                // Log or handle exceptions as needed
-                return Json(new { error = "An error occurred while processing the data." });
-            }
-        }
+        //        return Json(new { success = true });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log or handle exceptions as needed
+        //        return Json(new { error = "An error occurred while processing the data." });
+        //    }
+        //}
 
         [HttpPost]
         public IActionResult Edit(Employee updatedEmployee)

@@ -34,6 +34,8 @@
 
     <script>
 
+        var table = null;
+
         $(document).ready(function () {
 
             var dataSource = [
@@ -55,7 +57,7 @@
                 { id: '108', name: 'Ananthi', age: 34, city: 'Coimbatore', state: 'Tamil Nadu' },
             ]
 
-            $('#dtExample').DataTable({
+          table=  $('#dtExample').DataTable({
                 "bLengthChange": false,
                 dom: 'Bfrtip',
                 data: dataSource,
@@ -152,7 +154,27 @@
 
         $('#dtExample').on('click', 'tbody td .update', function (e) {
 
-            var openedTextBox = $('#dtExample').find('input');
+            var tr = $($(this).closest('td')).closest('tr');
+            var data = table.row(tr).data();
+
+            $.ajax({
+                url: '/Home/Update',
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.success);
+                    } else {
+                        alert('Failed to update data.');
+                    }
+                },
+                error: function () {
+                    alert('Error during AJAX request.');
+                }
+            });
+
+            var openedTextBox = $('#dtExample').find('select,input');
+
             $.each(openedTextBox, function (k, $cell) {
                 fnUpdateDataTableValue($cell, $cell.value);
                 $(openedTextBox[k]).closest('td').html($cell.value);
@@ -171,8 +193,26 @@
 
         $('#dtExample').on('click', 'tbody td .delete', function (e) {
 
-            alert('Conformation to delete');
+            var tr = $($(this).closest('td')).closest('tr');
+            var data = table.row(tr).data();
+
+            $.ajax({
+                url: '/Home/Delete',
+                type: 'POST',
+                data: data.id,
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.success);
+                    } else {
+                        alert('Failed to Delete data.');
+                    }
+                },
+                error: function () {
+                    alert('Error during AJAX request.');
+                }
+            });
         });
+
 
     </script>
 

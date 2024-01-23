@@ -25,24 +25,26 @@ namespace datatable_js_web.Controllers
             return Json(new { data = customers });
         }
 
-        [HttpPost("Process")]
-        public IActionResult Process([FromBody] Editor editorData)
-        {
-            try
-            {
-                //// Return a success response
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                // Log or handle exceptions as needed
-                return Json(new { error = "An error occurred while processing the data." });
-            }
-        }
+        //[HttpPost("Process")]
+        //public IActionResult Process([FromBody] Editor editorData)
+        //{
+        //    try
+        //    {
+        //        //// Return a success response
+        //        return Json(new { success = true });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log or handle exceptions as needed
+        //        return Json(new { error = "An error occurred while processing the data." });
+        //    }
+        //}
+        [HttpPost]
         public IActionResult Edit(Customer updatedCustomer)
         {
             return Json(new { success = true });
         }
+        [HttpPost]
         public IActionResult Delete(int id)
         {
             return Json(new { success = true });

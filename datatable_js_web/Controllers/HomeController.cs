@@ -20,16 +20,20 @@ namespace datatable_js_web.Controllers
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        [HttpPost]
+        public IActionResult Delete(int id) 
         {
-            return View();
+            return Json(new { success = true });
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult Update(Employee employee)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public IActionResult Add(Employee employee)
+        {
+            return Json(new { success = true });
         }
     }
 }

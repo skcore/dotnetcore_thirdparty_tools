@@ -55,12 +55,9 @@
 
             $('#example').on('click', '.save-btn', function () {
 
-                debugger; 
-
-                var tr = $(this).closest('tr');
+                var tr = $($(this).closest('td')).closest('tr');
                 var data = table.row(tr).data();
 
-                // Perform AJAX request to update data on the server
                 $.ajax({
                     url: '/datatable/Edit',
                     type: 'POST',
@@ -79,28 +76,24 @@
             });
 
             $('#example').on('click', '.cancel-btn', function () {
-                debugger;
-               // table.cell(this).cancelEdit();
 
-                tr.find('.save-btn, .cancel-btn').show();
-                tr.find('.edit-btn, .delete-btn').hide();
+                var tr = $($(this).closest('td')).closest('tr');
+                tr.find('.save-btn, .cancel-btn').hide();
+                tr.find('.edit-btn, .delete-btn').show();
             });
 
             $('#example').on('click', '.edit-btn', function () {
 
-                var tr = $(this).closest('tr');
-                //table.row(tr).edit();
-
-                // Show/hide buttons for the specific row
+                var tr = $($(this).closest('td')).closest('tr');
                 tr.find('.save-btn, .cancel-btn').show();
                 tr.find('.edit-btn, .delete-btn').hide();
             });
 
             $('#example').on('click', '.delete-btn', function () {
-                var tr = $(this).closest('tr');
+
+                var tr = $($(this).closest('td')).closest('tr');
                 var data = table.row(tr).data();
 
-                // Perform AJAX request to delete data on the server
                 $.ajax({
                     url: '/datatable/Delete',
                     type: 'POST',

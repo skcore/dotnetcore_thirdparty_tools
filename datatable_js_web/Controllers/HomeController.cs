@@ -9,16 +9,13 @@ namespace datatable_js_web.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        private List<Customer> customers = new List<Customer>();
 
         public IActionResult Index()
         {
-            return View();
+            Customer customer = new Customer();
+            customers = customer.GetCustomers();
+            return View(customers);
         }
         [HttpPost]
         public IActionResult Delete(int id) 
